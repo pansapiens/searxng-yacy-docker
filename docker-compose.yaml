@@ -31,7 +31,7 @@ services:
     networks:
       - searxng
     volumes:
-      - valkey-data2:/data
+      - /data/valkey/data:/data
     cap_drop:
       - ALL
     cap_add:
@@ -68,10 +68,27 @@ services:
         max-size: "1m"
         max-file: "1"
 
+  yacy_search_server:
+    container_name: yacy
+    image: yacy/yacy_search_server:latest
+    restart: unless-stopped
+    networks:
+      - searxng
+    ports:
+      - "8090:8090"
+      - "8443:8443"
+    volumes:
+      - /data/yacy_search_server/DATA:/opt/yacy_search_server/DATA
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "2"
+
 networks:
   searxng:
 
 volumes:
   caddy-data:
   caddy-config:
-  valkey-data2:
+  #valkey-data2:
