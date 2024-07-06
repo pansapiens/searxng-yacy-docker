@@ -31,7 +31,7 @@ services:
     networks:
       - searxng
     volumes:
-      - /data/valkey/data:/data
+      - valkey-data:/data
     cap_drop:
       - ALL
     cap_add:
@@ -68,7 +68,7 @@ services:
         max-size: "1m"
         max-file: "1"
 
-  yacy_search_server:
+  yacy:
     container_name: yacy
     image: yacy/yacy_search_server:latest
     restart: unless-stopped
@@ -91,4 +91,4 @@ networks:
 volumes:
   caddy-data:
   caddy-config:
-  #valkey-data2:
+  valkey-data:
