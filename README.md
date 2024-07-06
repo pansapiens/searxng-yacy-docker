@@ -20,6 +20,7 @@ Create a new SearXNG instance in five minutes using Docker
   cd searxng-docker
   ```
 - Copy [.env.example](https://github.com/searxng/searxng-docker/blob/master/.env.example) to `.env` and edit it to set the hostname and an email
+- Generare the hashed password for Basic Auth: `docker run -it --rm docker.io/library/caddy:2-alpine caddy hash-password` - put this in `.env` (use 'single quotes')
 - Generate the secret key `sed -i "s|ultrasecretkey|$(openssl rand -hex 32)|g" searxng/settings.yml`
 - Edit the [searxng/settings.yml](https://github.com/searxng/searxng-docker/blob/master/searxng/settings.yml) file according to your need
 - Check everything is working: `docker compose up`
@@ -86,3 +87,7 @@ git pull
 docker-compose pull
 docker-compose up -d
 ```
+
+# TODO
+
+- Consider using [filtron](https://searx.github.io/searx/admin/filtron.html)

@@ -4,15 +4,24 @@ services:
   caddy:
     container_name: caddy
     image: docker.io/library/caddy:2-alpine
-    network_mode: host
+    networks:
+      - searxng
+    ports:
+      - "80:80"
+      - "443:443"
     restart: unless-stopped
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data:rw
       - caddy-config:/config:rw
+    env_file:
+      - .env
     environment:
       - SEARXNG_HOSTNAME=${SEARXNG_HOSTNAME:-http://localhost:80}
       - SEARXNG_TLS=${LETSENCRYPT_EMAIL:-internal}
+      # Defaults to searxng:feigiequi7jei8ohch3ELohceeChaoh2 - change this in .env
+      - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME:-searxng}
+      - BASIC_AUTH_HASHED_PASSWORD=${BASIC_AUTH_HASHED_PASSWORD:-'$2a$14$ddqssUpzjSiz0C5YbWB4BeroW2i3qDp4DSWyhBfS1Mh78UmRp0NqO'}
     cap_drop:
       - ALL
     cap_add:
@@ -50,7 +59,7 @@ services:
     restart: unless-stopped
     networks:
       - searxng
-    ports:
+    expose:
       - "127.0.0.1:8080:8080"
     volumes:
       - ./searxng:/etc/searxng:rw
@@ -72,13 +81,16 @@ services:
     container_name: yacy
     image: yacy/yacy_search_server:latest
     restart: unless-stopped
+    user: "1001" #"yacy"
     networks:
       - searxng
     ports:
       - "8090:8090"
+    expose:
       - "8443:8443"
     volumes:
       - /data/yacy_search_server/DATA:/opt/yacy_search_server/DATA
+      #- yacy_search_server:/opt/yacy_search_server/DATA
     logging:
       driver: "json-file"
       options:
@@ -92,3 +104,4 @@ volumes:
   caddy-data:
   caddy-config:
   valkey-data:
+  #yacy_search_server:
