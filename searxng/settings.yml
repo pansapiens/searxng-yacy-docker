@@ -1,11 +1,55 @@
 # see https://docs.searxng.org/admin/settings/settings.html#settings-use-default-settings
 use_default_settings: true
+
+# or for ONLY yacy
+#use_default_settings:
+#    engines:
+#       keep_only:
+#         - yacy
+
 server:
   # base_url is defined in the SEARXNG_BASE_URL environment variable, see .env and docker-compose.yml
   secret_key: "ultrasecretkey"  # change this!
   limiter: true  # can be disabled for a private instance
   image_proxy: true
+  default_http_headers:
+      X-Content-Type-Options : nosniff
+      X-XSS-Protection : 1; mode=block
+      X-Download-Options : noopen
+      X-Robots-Tag : noindex, nofollow
+      Referrer-Policy : no-referrer
+
 ui:
   static_use_hash: true
 redis:
   url: redis://redis:6379/0
+
+engines:
+  - name: yacy
+    engine: yacy
+    categories: general
+    search_type: text
+    weight : 10
+    base_url:
+      - http://yacy:8090
+      #- https://yacy.searchlab.eu
+      #- https://search.lomig.me
+      #- https://yacy.ecosys.eu
+      #- https://search.webproject.link
+    shortcut: ya
+    disabled: false
+    # required if you aren't using HTTPS for your local yacy instance
+    # https://docs.searxng.org/dev/engines/online/yacy.html
+    enable_http: true
+    timeout: 10.0
+    # search_mode: 'local'
+    search_mode: 'global'
+    http_digest_auth_user: "admin"
+    http_digest_auth_pass: "yacy"
+
+  - name: yacy images
+    engine: yacy
+    categories: images
+    search_type: image
+    shortcut: yai
+    disabled: false
