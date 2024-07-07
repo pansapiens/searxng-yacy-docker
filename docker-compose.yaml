@@ -21,7 +21,7 @@ services:
       - SEARXNG_TLS=${LETSENCRYPT_EMAIL:-internal}
       # Defaults to searxng:feigiequi7jei8ohch3ELohceeChaoh2 - change this in .env
       - BASIC_AUTH_USERNAME=${BASIC_AUTH_USERNAME:-searxng}
-      - BASIC_AUTH_HASHED_PASSWORD=${BASIC_AUTH_HASHED_PASSWORD:-'$2a$14$ddqssUpzjSiz0C5YbWB4BeroW2i3qDp4DSWyhBfS1Mh78UmRp0NqO'}
+      - BASIC_AUTH_HASHED_PASSWORD=${BASIC_AUTH_HASHED_PASSWORD:-'$$2a$$14$$ddqssUpzjSiz0C5YbWB4BeroW2i3qDp4DSWyhBfS1Mh78UmRp0NqO'}
     cap_drop:
       - ALL
     cap_add:
